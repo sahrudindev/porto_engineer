@@ -6,9 +6,8 @@ import TechStack from './components/TechStack';
 import Experience from './components/Experience';
 import Competencies from './components/Competencies';
 import Projects from './components/Projects';
+import GitHubActivity from './components/GitHubActivity';
 import Certifications from './components/Certifications';
-import Testimonials from './components/Testimonials';
-import Blog from './components/Blog';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 
@@ -24,9 +23,8 @@ function App() {
           <Experience />
           <Competencies />
           <Projects />
+          <GitHubActivity />
           <Certifications />
-          <Testimonials />
-          <Blog />
           <Contact />
         </main>
         <Footer />

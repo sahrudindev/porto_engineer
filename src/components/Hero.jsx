@@ -1,6 +1,45 @@
-import { personalInfo, stats } from '../data/portfolioData';
+import { useState, useEffect } from 'react';
+import { fetchGitHubProfile, fetchGitHubRepos } from '../services/github';
 
 export default function Hero() {
+    const [profile, setProfile] = useState(null);
+    const [repoCount, setRepoCount] = useState(0);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function loadData() {
+            try {
+                const profileData = await fetchGitHubProfile();
+                if (profileData) {
+                    setProfile(profileData);
+                    setRepoCount(profileData.public_repos || 0);
+                }
+            } catch (err) {
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        }
+        loadData();
+    }, []);
+
+    const personalInfo = {
+        name: profile?.name || 'Sahrudin',
+        available: true,
+        tagline: 'Production-Grade Data Platforms',
+        shortBio: profile?.bio || 'I focused on Data Science and Machine Learning, achieving top Python GPA. Building production-grade data pipelines and analytics systems.',
+        resumeUrl: '/resume.pdf',
+        github: profile?.html_url || 'https://github.com/sahrudindev',
+        linkedin: 'https://www.linkedin.com/in/sahrudindev/',
+    };
+
+    const stats = [
+        { value: `${repoCount}+`, label: 'GitHub Repos', icon: 'code' },
+        { value: '4+', label: 'Data Projects', icon: 'database' },
+        { value: 'Python', label: 'Top Skill', icon: 'terminal' },
+        { value: '2021', label: 'Since', icon: 'calendar_month' },
+    ];
+
     return (
         <section className="relative w-full flex justify-center py-16 lg:py-24 overflow-hidden" id="home">
             {/* Background Gradient Blurs */}
@@ -27,13 +66,15 @@ export default function Hero() {
                         {/* Headline */}
                         <div className="space-y-5 animate-fade-in-up delay-100">
                             <h1 className="text-4xl lg:text-6xl font-black leading-[1.1] tracking-tight text-slate-900 dark:text-white">
-                                Building{' '}
+                                Hi, I'm{' '}
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">
-                                    {personalInfo.tagline.split(' ').slice(0, 1).join(' ')}
-                                </span>{' '}
-                                {personalInfo.tagline.split(' ').slice(1).join(' ')}
+                                    {personalInfo.name}
+                                </span>
                             </h1>
-                            <p className="text-lg lg:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                            <p className="text-xl lg:text-2xl font-bold text-slate-700 dark:text-slate-200">
+                                Building {personalInfo.tagline}
+                            </p>
+                            <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
                                 {personalInfo.shortBio}
                             </p>
                         </div>
@@ -41,11 +82,15 @@ export default function Hero() {
                         {/* CTA Buttons */}
                         <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2 animate-fade-in-up delay-200">
                             <a
-                                href={personalInfo.resumeUrl}
-                                className="flex h-12 items-center justify-center rounded-lg bg-primary px-8 text-base font-bold text-white transition-all hover:bg-primary-dark shadow-lg shadow-primary/25 hover:-translate-y-0.5"
+                                href={personalInfo.github}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex h-12 items-center justify-center rounded-lg bg-slate-900 dark:bg-white px-8 text-base font-bold text-white dark:text-slate-900 transition-all hover:opacity-90 shadow-lg hover:-translate-y-0.5"
                             >
-                                <span className="material-symbols-outlined mr-2 text-[20px]">download</span>
-                                Download Resume
+                                <svg className="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+                                </svg>
+                                View GitHub
                             </a>
                             <a
                                 href="#projects"
@@ -62,7 +107,9 @@ export default function Hero() {
                                 <div key={index} className="text-center sm:text-left group">
                                     <div className="flex items-center gap-2 justify-center sm:justify-start mb-1">
                                         <span className="material-symbols-outlined text-primary text-[18px]">{stat.icon}</span>
-                                        <p className="text-2xl lg:text-3xl font-black text-slate-900 dark:text-white tracking-tight">{stat.value}</p>
+                                        <p className="text-2xl lg:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+                                            {loading && index === 0 ? '...' : stat.value}
+                                        </p>
                                     </div>
                                     <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
                                         {stat.label}
@@ -105,12 +152,12 @@ export default function Hero() {
                                         <span className="material-symbols-outlined">check_circle</span>
                                     </div>
                                     <div>
-                                        <p className="text-xs text-slate-300 font-medium uppercase tracking-wider">Pipeline Status</p>
-                                        <p className="text-sm font-bold text-white">All Systems Operational</p>
+                                        <p className="text-xs text-slate-300 font-medium uppercase tracking-wider">GitHub Stats</p>
+                                        <p className="text-sm font-bold text-white">{repoCount}+ Repositories</p>
                                     </div>
                                 </div>
-                                <span className="hidden sm:inline-flex items-center rounded-md bg-green-500/10 px-2 py-1 text-xs font-medium text-green-400 ring-1 ring-inset ring-green-500/20">
-                                    Docker
+                                <span className="hidden sm:inline-flex items-center rounded-md bg-primary/10 px-2 py-1 text-xs font-medium text-primary ring-1 ring-inset ring-primary/20">
+                                    Active
                                 </span>
                             </div>
                         </div>
