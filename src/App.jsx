@@ -1,4 +1,5 @@
 import { ThemeProvider } from './context/ThemeContext';
+import { ScrollProgress } from './components/reactbits';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -14,7 +15,8 @@ import Footer from './components/Footer';
 function App() {
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display transition-colors duration-300">
+      <div className="min-h-screen bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display transition-colors duration-300 overflow-x-hidden">
+        <ScrollProgress />
         <Navbar />
         <main>
           <Hero />

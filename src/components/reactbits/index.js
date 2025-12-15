@@ -9,3 +9,7 @@ export { default as AnimatedList } from './AnimatedList';
 export { default as Aurora } from './Aurora';
 export { default as ProfileCard } from './ProfileCard';
 export { default as SparkleCard } from './SparkleCard';
+export { default as Particles } from './Particles';
+export { default as FloatingOrbs } from './FloatingOrbs';
+export { default as ScrollProgress } from './ScrollProgress';
+export { default as TextReveal } from './TextReveal';
