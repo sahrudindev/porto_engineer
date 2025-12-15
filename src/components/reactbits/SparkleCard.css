@@ -1,0 +1,300 @@
+.sparkle-card {
+    position: relative;
+    width: 340px;
+    min-height: 500px;
+    border-radius: 24px;
+    background: linear-gradient(160deg,
+            rgba(20, 18, 50, 0.98) 0%,
+            rgba(35, 32, 70, 0.95) 50%,
+            rgba(20, 18, 50, 0.98) 100%);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    box-shadow:
+        0 0 60px rgba(139, 92, 246, 0.1),
+        0 25px 80px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.sparkle-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 500px;
+    padding: 32px 24px 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sparkles-container {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.sparkle-svg {
+    position: absolute;
+    animation: sparkle-float 3s ease-in-out infinite;
+    opacity: 0;
+    filter: drop-shadow(0 0 8px currentColor);
+}
+
+@keyframes sparkle-float {
+    0% {
+        opacity: 0;
+        transform: translateY(10px) scale(0.6);
+    }
+
+    15% {
+        opacity: 0.8;
+    }
+
+    85% {
+        opacity: 0.8;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-20px) scale(1);
+    }
+}
+
+.sparkle-card-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.sparkle-card-name {
+    font-size: 32px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0 0 6px 0;
+    letter-spacing: -0.5px;
+    font-style: italic;
+}
+
+.sparkle-card-title {
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
+.sparkle-card-avatar {
+    position: relative;
+    z-index: 5;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 16px 0;
+}
+
+.sparkle-card-avatar img {
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+    max-height: 280px;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 8px;
+    mask-image: linear-gradient(to bottom,
+            black 0%,
+            black 70%,
+            transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom,
+            black 0%,
+            black 70%,
+            transparent 100%);
+}
+
+/* Footer */
+.sparkle-card-footer {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    margin: 0 -24px -20px;
+    background: rgba(30, 27, 60, 0.8);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 0 0 24px 24px;
+}
+
+.sparkle-card-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sparkle-card-mini-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(139, 92, 246, 0.3);
+}
+
+.sparkle-card-user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sparkle-card-username {
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+}
+
+.sparkle-card-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.status-dot-online {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    animation: pulse-online 2s ease-in-out infinite;
+}
+
+@keyframes pulse-online {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+    }
+}
+
+.sparkle-card-contact-btn {
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.sparkle-card-contact-btn:hover {
+    background: rgba(139, 92, 246, 0.3);
+    border-color: rgba(139, 92, 246, 0.5);
+    transform: translateY(-2px);
+}
+
+/* Glow effect on hover */
+.sparkle-card:hover {
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow:
+        0 0 80px rgba(139, 92, 246, 0.2),
+        0 25px 80px rgba(0, 0, 0, 0.5);
+}
+
+.sparkle-card:hover .sparkle-svg {
+    animation-duration: 2s;
+}
+
+/* Gradient overlay */
+.sparkle-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%,
+            rgba(139, 92, 246, 0.1) 0%,
+            transparent 40%);
+    pointer-events: none;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .sparkle-card {
+        width: 300px;
+        min-height: 440px;
+    }
+
+    .sparkle-card-inner {
+        min-height: 440px;
+        padding: 24px 20px 16px;
+    }
+
+    .sparkle-card-name {
+        font-size: 26px;
+    }
+
+    .sparkle-card-avatar img {
+        max-width: 240px;
+        max-height: 240px;
+    }
+
+    .sparkle-card-footer {
+        padding: 12px 16px;
+        margin: 0 -20px -16px;
+    }
+
+    .sparkle-card-mini-avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+    .sparkle-card-username {
+        font-size: 13px;
+    }
+
+    .sparkle-card-contact-btn {
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sparkle-card {
+        width: 280px;
+        min-height: 400px;
+    }
+
+    .sparkle-card-inner {
+        min-height: 400px;
+        padding: 20px 16px 14px;
+    }
+
+    .sparkle-card-name {
+        font-size: 22px;
+    }
+
+    .sparkle-card-avatar img {
+        max-width: 200px;
+        max-height: 200px;
+    }
+
+    .sparkle-card-footer {
+        flex-direction: column;
+        gap: 12px;
+        padding: 14px;
+        margin: 0 -16px -14px;
+    }
+
+    .sparkle-card-user {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .sparkle-card-contact-btn {
+        width: 100%;
+        text-align: center;
+    }
+}

@@ -1,4 +1,5 @@
 import { techStack } from '../data/portfolioData';
+import { AnimatedList, ShinyText } from './reactbits';
 
 export default function TechStack() {
     return (
@@ -6,9 +7,17 @@ export default function TechStack() {
             <div className="flex justify-center">
                 <div className="flex flex-col max-w-[1200px] w-full px-6 lg:px-10">
                     <h3 className="text-center text-sm font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-8">
-                        Technology Stack & Tools
+                        <ShinyText
+                            text="Technology Stack & Tools"
+                            speed={3}
+                            className="text-sm font-bold uppercase tracking-widest"
+                        />
                     </h3>
-                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+                    <AnimatedList
+                        className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4"
+                        staggerDelay={0.05}
+                        direction="scale"
+                    >
                         {techStack.map((tech, index) => (
                             <div
                                 key={tech.name}
@@ -21,7 +30,7 @@ export default function TechStack() {
                                 <span className="font-bold text-sm text-slate-700 dark:text-slate-300">{tech.name}</span>
                             </div>
                         ))}
-                    </div>
+                    </AnimatedList>
                 </div>
             </div>
         </section>
