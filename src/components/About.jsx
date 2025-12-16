@@ -3,26 +3,87 @@ import { motion, useInView } from 'framer-motion';
 import { fetchGitHubProfile, fetchGitHubRepos } from '../services/github';
 import { ProfileCard, GradientText } from './reactbits';
 
-// Animated Skill Bar
-function SkillBar({ name, level, delay = 0 }) {
+// Premium Skill Category Component
+function SkillCategory({ icon, title, skills, gradient, delay = 0 }) {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: "-50px" });
 
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.05,
+                delayChildren: delay,
+            },
+        },
+    };
+
+    const tagVariants = {
+        hidden: { opacity: 0, scale: 0.8, y: 10 },
+        visible: {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            transition: { type: "spring", stiffness: 300, damping: 20 },
+        },
+    };
+
     return (
-        <div ref={ref} className="space-y-2">
-            <div className="flex justify-between items-center">
-                <span className="text-sm font-bold text-slate-700 dark:text-slate-300">{name}</span>
-                <span className="text-xs font-bold text-primary">{level}%</span>
-            </div>
-            <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+        <motion.div
+            ref={ref}
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: delay * 0.1 }}
+            className="group relative"
+        >
+            {/* Glow Effect on Hover */}
+            <div className={`absolute -inset-0.5 ${gradient} rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-500`} />
+
+            <div className="relative bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl p-5 border border-slate-200/50 dark:border-slate-700/50 hover:border-primary/30 transition-all duration-300">
+                {/* Category Header */}
+                <div className="flex items-center gap-3 mb-4">
+                    <div className={`w-10 h-10 rounded-xl ${gradient} flex items-center justify-center text-white shadow-lg transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
+                        <span className="material-symbols-outlined text-[20px]">{icon}</span>
+                    </div>
+                    <h4 className="text-base font-bold text-slate-800 dark:text-white group-hover:text-primary transition-colors duration-300">
+                        {title}
+                    </h4>
+                </div>
+
+                {/* Skill Tags */}
                 <motion.div
-                    initial={{ width: 0 }}
-                    animate={isInView ? { width: `${level}%` } : { width: 0 }}
-                    transition={{ duration: 1, delay, ease: "easeOut" }}
-                    className="h-full bg-gradient-to-r from-primary via-violet-500 to-cyan-500 rounded-full"
-                />
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate={isInView ? "visible" : "hidden"}
+                    className="flex flex-wrap gap-2"
+                >
+                    {skills.map((skill, index) => (
+                        <motion.span
+                            key={skill}
+                            variants={tagVariants}
+                            whileHover={{
+                                scale: 1.05,
+                                y: -2,
+                                boxShadow: "0 8px 25px -5px rgba(139, 92, 246, 0.3)"
+                            }}
+                            whileTap={{ scale: 0.95 }}
+                            className="relative px-3 py-1.5 text-sm font-semibold rounded-lg cursor-default
+                                bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-700/80 dark:to-slate-600/80
+                                text-slate-700 dark:text-slate-200
+                                border border-slate-200/80 dark:border-slate-600/50
+                                hover:border-primary/50 hover:text-primary dark:hover:text-primary
+                                shadow-sm hover:shadow-md
+                                transition-all duration-200"
+                        >
+                            {/* Subtle shine effect */}
+                            <span className="absolute inset-0 rounded-lg bg-gradient-to-r from-white/0 via-white/30 to-white/0 dark:via-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            <span className="relative">{skill}</span>
+                        </motion.span>
+                    ))}
+                </motion.div>
             </div>
-        </div>
+        </motion.div>
     );
 }
 
@@ -32,14 +93,14 @@ function InfoCard({ icon, label, value, gradient = false }) {
         <motion.div
             whileHover={{ scale: 1.02, y: -2 }}
             className={`group p-4 rounded-2xl ${gradient
-                    ? 'bg-gradient-to-br from-primary/10 via-violet-500/10 to-cyan-500/10 border border-primary/20'
-                    : 'bg-slate-100 dark:bg-slate-800/50'
+                ? 'bg-gradient-to-br from-primary/10 via-violet-500/10 to-cyan-500/10 border border-primary/20'
+                : 'bg-slate-100 dark:bg-slate-800/50'
                 } transition-all duration-300`}
         >
             <div className="flex items-center gap-3">
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${gradient
-                        ? 'bg-gradient-to-br from-primary to-violet-500 text-white shadow-lg shadow-primary/25'
-                        : 'bg-white dark:bg-slate-700 text-primary'
+                    ? 'bg-gradient-to-br from-primary to-violet-500 text-white shadow-lg shadow-primary/25'
+                    : 'bg-white dark:bg-slate-700 text-primary'
                     }`}>
                     <span className="material-symbols-outlined text-[20px]">{icon}</span>
                 </div>
@@ -111,12 +172,31 @@ export default function About() {
         available: true,
     };
 
-    const skills = [
-        { name: 'Python', level: 95 },
-        { name: 'SQL & BigQuery', level: 90 },
-        { name: 'Apache Spark', level: 85 },
-        { name: 'Docker & K8s', level: 80 },
-        { name: 'dbt & Airflow', level: 85 },
+    const skillCategories = [
+        {
+            icon: 'engineering',
+            title: 'Data Engineering',
+            skills: ['Python', 'SQL', 'Apache Spark', 'Kafka', 'Airflow', 'dbt'],
+            gradient: 'bg-gradient-to-br from-primary to-violet-500',
+        },
+        {
+            icon: 'cloud',
+            title: 'Cloud & Infrastructure',
+            skills: ['GCP', 'BigQuery', 'Docker', 'Kubernetes', 'Terraform', 'CI/CD'],
+            gradient: 'bg-gradient-to-br from-cyan-500 to-blue-500',
+        },
+        {
+            icon: 'storage',
+            title: 'Data Storage',
+            skills: ['PostgreSQL', 'MongoDB', 'Redis', 'Delta Lake', 'Iceberg', 'Hive'],
+            gradient: 'bg-gradient-to-br from-emerald-500 to-teal-500',
+        },
+        {
+            icon: 'monitoring',
+            title: 'Analytics & Monitoring',
+            skills: ['Pandas', 'Power BI', 'Looker', 'Grafana', 'Prometheus'],
+            gradient: 'bg-gradient-to-br from-orange-500 to-amber-500',
+        },
     ];
 
     const handleContactClick = () => {
@@ -220,21 +300,26 @@ export default function About() {
                             <InfoCard icon="check_circle" label="Status" value="Available" gradient />
                         </div>
 
-                        {/* Skills Card */}
+                        {/* Skills Card - Full Width Premium */}
                         <BentoCard className="lg:col-span-7">
                             <div className="flex items-center gap-3 mb-6">
-                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center text-white">
+                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center text-white shadow-lg shadow-violet-500/25">
                                     <span className="material-symbols-outlined text-[20px]">code</span>
                                 </div>
-                                <h3 className="text-xl font-bold text-slate-900 dark:text-white">Core Skills</h3>
+                                <div>
+                                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">Technical Expertise</h3>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400">Technologies I work with daily</p>
+                                </div>
                             </div>
-                            <div className="space-y-4">
-                                {skills.map((skill, index) => (
-                                    <SkillBar
-                                        key={skill.name}
-                                        name={skill.name}
-                                        level={skill.level}
-                                        delay={index * 0.1}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {skillCategories.map((category, index) => (
+                                    <SkillCategory
+                                        key={category.title}
+                                        icon={category.icon}
+                                        title={category.title}
+                                        skills={category.skills}
+                                        gradient={category.gradient}
+                                        delay={index}
                                     />
                                 ))}
                             </div>
