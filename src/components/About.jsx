@@ -87,43 +87,54 @@ function SkillCategory({ icon, title, skills, gradient, delay = 0 }) {
     );
 }
 
-// Compact Impact Metric - Single Row Display
-function ImpactMetric({ value, label, gradient, delay = 0 }) {
+// Unified Stat Card - Premium Design for all metrics
+function StatCard({ icon, value, label, sublabel, gradient, delay = 0 }) {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: "-50px" });
 
     return (
         <motion.div
             ref={ref}
-            initial={{ opacity: 0, y: 20, scale: 0.9 }}
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-            transition={{ duration: 0.5, delay: delay * 0.08, type: "spring", stiffness: 200 }}
-            whileHover={{ y: -3, scale: 1.03 }}
-            className="group relative flex-1"
+            transition={{ duration: 0.5, delay: delay * 0.1, type: "spring", stiffness: 200 }}
+            whileHover={{ y: -4, scale: 1.02 }}
+            className="group relative h-full"
         >
-            {/* Glow effect on hover */}
-            <div className={`absolute -inset-0.5 ${gradient} rounded-xl blur-lg opacity-0 group-hover:opacity-50 transition-opacity duration-500`} />
+            {/* Glow effect */}
+            <div className={`absolute -inset-0.5 ${gradient} rounded-2xl blur-xl opacity-0 group-hover:opacity-50 transition-opacity duration-500`} />
 
-            <div className={`relative p-4 rounded-xl ${gradient} border border-white/20 backdrop-blur-sm overflow-hidden`}>
-                {/* Shine effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className={`relative h-full p-5 rounded-2xl ${gradient} border border-white/20 backdrop-blur-sm overflow-hidden flex flex-col justify-center`}>
+                {/* Animated shine */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
 
-                {/* Content - Compact */}
-                <div className="relative flex flex-col items-center text-center">
-                    {/* Value */}
-                    <motion.span
-                        initial={{ opacity: 0, scale: 0.5 }}
-                        animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                        transition={{ duration: 0.4, delay: delay * 0.08 + 0.1, type: "spring" }}
-                        className="text-2xl lg:text-3xl font-black text-white drop-shadow-lg"
-                    >
-                        {value}
-                    </motion.span>
+                {/* Glass overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/10" />
 
-                    {/* Label */}
-                    <span className="text-[10px] lg:text-xs font-bold text-white/80 uppercase tracking-wider mt-1">
-                        {label}
-                    </span>
+                {/* Content */}
+                <div className="relative flex items-center gap-4">
+                    {/* Icon */}
+                    <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center flex-shrink-0 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
+                        <span className="material-symbols-outlined text-[24px] text-white">{icon}</span>
+                    </div>
+
+                    {/* Text */}
+                    <div className="flex-1 min-w-0">
+                        <motion.p
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={isInView ? { opacity: 1, x: 0 } : {}}
+                            transition={{ duration: 0.4, delay: delay * 0.1 + 0.1 }}
+                            className="text-xl lg:text-2xl font-black text-white drop-shadow-md truncate"
+                        >
+                            {value}
+                        </motion.p>
+                        <p className="text-xs font-bold text-white/90 uppercase tracking-wider truncate">
+                            {label}
+                        </p>
+                        {sublabel && (
+                            <p className="text-[10px] text-white/70 truncate mt-0.5">{sublabel}</p>
+                        )}
+                    </div>
                 </div>
             </div>
         </motion.div>
@@ -307,61 +318,37 @@ export default function About() {
                             </div>
                         </BentoCard>
 
-                        {/* 2x2 Info Grid - Left Side */}
+                        {/* 2x2 Stats Grid - Premium Unified Design */}
                         <div className="lg:col-span-5 grid grid-cols-2 gap-3">
-                            {/* Location Card */}
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                whileHover={{ y: -2 }}
-                                className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/50 dark:border-slate-700/50"
-                            >
-                                <div className="flex items-start gap-3">
-                                    <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center text-white flex-shrink-0">
-                                        <span className="material-symbols-outlined text-[18px]">location_on</span>
-                                    </div>
-                                    <div>
-                                        <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Location</p>
-                                        <p className="text-sm font-bold text-slate-800 dark:text-white">{personalInfo.location}</p>
-                                        <p className="text-xs text-primary font-medium mt-0.5">🌐 Remote Ready</p>
-                                    </div>
-                                </div>
-                            </motion.div>
-
-                            {/* Education Card */}
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: 0.1 }}
-                                whileHover={{ y: -2 }}
-                                className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/50 dark:border-slate-700/50"
-                            >
-                                <div className="flex items-start gap-3">
-                                    <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-white flex-shrink-0">
-                                        <span className="material-symbols-outlined text-[18px]">school</span>
-                                    </div>
-                                    <div>
-                                        <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Education</p>
-                                        <p className="text-sm font-bold text-slate-800 dark:text-white">B.Sc Data Science</p>
-                                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Institut Teknologi Garut</p>
-                                    </div>
-                                </div>
-                            </motion.div>
-
-                            {/* Experience Metric */}
-                            <ImpactMetric
-                                value="4+"
-                                label="Years Exp"
+                            <StatCard
+                                icon="location_on"
+                                value="Indonesia"
+                                label="Location"
+                                sublabel="🌐 Remote Ready"
+                                gradient="bg-gradient-to-br from-primary to-blue-600"
+                                delay={0}
+                            />
+                            <StatCard
+                                icon="school"
+                                value="Data Science"
+                                label="Education"
+                                sublabel="Institut Teknologi Garut"
+                                gradient="bg-gradient-to-br from-violet-500 to-purple-600"
+                                delay={1}
+                            />
+                            <StatCard
+                                icon="work_history"
+                                value="4+ Years"
+                                label="Experience"
+                                sublabel="Data Engineering"
                                 gradient="bg-gradient-to-br from-emerald-500 to-teal-600"
                                 delay={2}
                             />
-
-                            {/* Projects Metric */}
-                            <ImpactMetric
+                            <StatCard
+                                icon="deployed_code"
                                 value="15+"
                                 label="Projects"
+                                sublabel="Production Ready"
                                 gradient="bg-gradient-to-br from-orange-500 to-amber-500"
                                 delay={3}
                             />
