@@ -87,28 +87,43 @@ function SkillCategory({ icon, title, skills, gradient, delay = 0 }) {
     );
 }
 
-// Info Card Component
-function InfoCard({ icon, label, value, gradient = false }) {
+// Compact Impact Metric - Single Row Display
+function ImpactMetric({ value, label, gradient, delay = 0 }) {
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true, margin: "-50px" });
+
     return (
         <motion.div
-            whileHover={{ scale: 1.02, y: -2 }}
-            className={`group p-4 rounded-2xl ${gradient
-                ? 'bg-gradient-to-br from-primary/10 via-violet-500/10 to-cyan-500/10 border border-primary/20'
-                : 'bg-slate-100 dark:bg-slate-800/50'
-                } transition-all duration-300`}
+            ref={ref}
+            initial={{ opacity: 0, y: 20, scale: 0.9 }}
+            animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+            transition={{ duration: 0.5, delay: delay * 0.08, type: "spring", stiffness: 200 }}
+            whileHover={{ y: -3, scale: 1.03 }}
+            className="group relative flex-1"
         >
-            <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${gradient
-                    ? 'bg-gradient-to-br from-primary to-violet-500 text-white shadow-lg shadow-primary/25'
-                    : 'bg-white dark:bg-slate-700 text-primary'
-                    }`}>
-                    <span className="material-symbols-outlined text-[20px]">{icon}</span>
-                </div>
-                <div>
-                    <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+            {/* Glow effect on hover */}
+            <div className={`absolute -inset-0.5 ${gradient} rounded-xl blur-lg opacity-0 group-hover:opacity-50 transition-opacity duration-500`} />
+
+            <div className={`relative p-4 rounded-xl ${gradient} border border-white/20 backdrop-blur-sm overflow-hidden`}>
+                {/* Shine effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                {/* Content - Compact */}
+                <div className="relative flex flex-col items-center text-center">
+                    {/* Value */}
+                    <motion.span
+                        initial={{ opacity: 0, scale: 0.5 }}
+                        animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                        transition={{ duration: 0.4, delay: delay * 0.08 + 0.1, type: "spring" }}
+                        className="text-2xl lg:text-3xl font-black text-white drop-shadow-lg"
+                    >
+                        {value}
+                    </motion.span>
+
+                    {/* Label */}
+                    <span className="text-[10px] lg:text-xs font-bold text-white/80 uppercase tracking-wider mt-1">
                         {label}
-                    </p>
-                    <p className="text-sm font-bold text-slate-900 dark:text-white">{value}</p>
+                    </span>
                 </div>
             </div>
         </motion.div>
@@ -292,15 +307,67 @@ export default function About() {
                             </div>
                         </BentoCard>
 
-                        {/* Quick Info Cards */}
-                        <div className="lg:col-span-5 grid grid-cols-2 gap-4">
-                            <InfoCard icon="location_on" label="Based in" value={personalInfo.location} gradient />
-                            <InfoCard icon="school" label="Education" value="ITG" />
-                            <InfoCard icon="code" label="Repositories" value={`${stats.repos}+`} />
-                            <InfoCard icon="check_circle" label="Status" value="Available" gradient />
+                        {/* 2x2 Info Grid - Left Side */}
+                        <div className="lg:col-span-5 grid grid-cols-2 gap-3">
+                            {/* Location Card */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                whileHover={{ y: -2 }}
+                                className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/50 dark:border-slate-700/50"
+                            >
+                                <div className="flex items-start gap-3">
+                                    <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center text-white flex-shrink-0">
+                                        <span className="material-symbols-outlined text-[18px]">location_on</span>
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Location</p>
+                                        <p className="text-sm font-bold text-slate-800 dark:text-white">{personalInfo.location}</p>
+                                        <p className="text-xs text-primary font-medium mt-0.5">🌐 Remote Ready</p>
+                                    </div>
+                                </div>
+                            </motion.div>
+
+                            {/* Education Card */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: 0.1 }}
+                                whileHover={{ y: -2 }}
+                                className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/50 dark:border-slate-700/50"
+                            >
+                                <div className="flex items-start gap-3">
+                                    <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-white flex-shrink-0">
+                                        <span className="material-symbols-outlined text-[18px]">school</span>
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Education</p>
+                                        <p className="text-sm font-bold text-slate-800 dark:text-white">B.Sc Data Science</p>
+                                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Institut Teknologi Garut</p>
+                                    </div>
+                                </div>
+                            </motion.div>
+
+                            {/* Experience Metric */}
+                            <ImpactMetric
+                                value="4+"
+                                label="Years Exp"
+                                gradient="bg-gradient-to-br from-emerald-500 to-teal-600"
+                                delay={2}
+                            />
+
+                            {/* Projects Metric */}
+                            <ImpactMetric
+                                value="15+"
+                                label="Projects"
+                                gradient="bg-gradient-to-br from-orange-500 to-amber-500"
+                                delay={3}
+                            />
                         </div>
 
-                        {/* Skills Card - Full Width Premium */}
+                        {/* Technical Expertise - Right Side */}
                         <BentoCard className="lg:col-span-7">
                             <div className="flex items-center gap-3 mb-6">
                                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center text-white shadow-lg shadow-violet-500/25">
