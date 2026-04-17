@@ -3,15 +3,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { fetchCertificates } from '../services/github';
 import { GradientText } from './reactbits';
 
+const cardVariants = {
+    hidden: { opacity: 0, y: 20, scale: 0.95 },
+    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.4 } },
+    exit: { opacity: 0, y: -10, transition: { duration: 0.2 } }
+};
+
 function CertCard({ cert, index }) {
     const isSpecialization = cert.type === 'Specialization';
 
     return (
         <motion.a
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, margin: "-30px" }}
-            transition={{ delay: index * 0.05, duration: 0.4 }}
+            variants={cardVariants}
             whileHover={{ y: -5, scale: 1.02 }}
             href={cert.url}
             target="_blank"
@@ -212,10 +215,15 @@ export default function Certifications() {
                         <AnimatePresence mode="wait">
                             <motion.div
                                 key={activeTab}
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                transition={{ duration: 0.2 }}
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true, margin: "-50px" }}
+                                exit="exit"
+                                variants={{
+                                    hidden: { opacity: 0 },
+                                    visible: { opacity: 1, transition: { staggerChildren: 0.05 } },
+                                    exit: { opacity: 0 }
+                                }}
                                 className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
                             >
                                 {filteredCerts.map((cert, index) => (

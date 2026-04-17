@@ -100,7 +100,7 @@ function MarqueeRow({ items, direction = 'left', speed = 30 }) {
             <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white dark:from-surface-dark to-transparent z-10 pointer-events-none" />
 
             <motion.div
-                className="flex gap-5 hover:[animation-play-state:paused]"
+                className="flex gap-5 hover:[animation-play-state:paused] will-change-transform"
                 animate={{
                     x: direction === 'left' ? ['0%', '-50%'] : ['-50%', '0%'],
                 }}

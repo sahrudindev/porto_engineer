@@ -32,13 +32,23 @@ const competencies = [
     },
 ];
 
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: { staggerChildren: 0.1 }
+    }
+};
+
+const cardVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+};
+
 function CompetencyCard({ competency, index }) {
     return (
         <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ delay: index * 0.1, duration: 0.5 }}
+            variants={cardVariants}
             whileHover={{ y: -5 }}
             className="group relative"
         >
@@ -119,11 +129,17 @@ export default function Competencies() {
                     </motion.div>
 
                     {/* Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <motion.div 
+                        variants={containerVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: "-50px" }}
+                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+                    >
                         {competencies.map((competency, index) => (
                             <CompetencyCard key={competency.title} competency={competency} index={index} />
                         ))}
-                    </div>
+                    </motion.div>
                 </div>
             </div>
         </section>

@@ -52,6 +52,19 @@ const experiences = [
     },
 ];
 
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: { staggerChildren: 0.2 }
+    }
+};
+
+const cardVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+};
+
 function TimelineCard({ experience, index, isLast }) {
     const isLeft = index % 2 === 0;
 
@@ -71,10 +84,7 @@ function TimelineCard({ experience, index, isLast }) {
 
             {/* Card */}
             <motion.div
-                initial={{ opacity: 0, x: isLeft ? -30 : 30, y: 20 }}
-                whileInView={{ opacity: 1, x: 0, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                variants={cardVariants}
                 className="flex-1 lg:w-[calc(50%-40px)]"
             >
                 <div className="group relative bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 p-6 hover:shadow-xl hover:shadow-primary/5 transition-all hover-lift overflow-hidden">
@@ -188,7 +198,13 @@ export default function Experience() {
                     </motion.div>
 
                     {/* Timeline */}
-                    <div className="relative pl-16 lg:pl-0 space-y-8 lg:space-y-12">
+                    <motion.div 
+                        variants={containerVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: "-50px" }}
+                        className="relative pl-16 lg:pl-0 space-y-8 lg:space-y-12"
+                    >
                         {experiences.map((experience, index) => (
                             <TimelineCard
                                 key={index}
@@ -197,7 +213,7 @@ export default function Experience() {
                                 isLast={index === experiences.length - 1}
                             />
                         ))}
-                    </div>
+                    </motion.div>
                 </div>
             </div>
         </section>

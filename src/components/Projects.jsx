@@ -3,6 +3,25 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { fetchFeaturedProjects, getLanguageColor, getCategoryLabel } from '../services/github';
 import { TiltCard, GradientText, ShinyText } from './reactbits';
 
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1
+        }
+    }
+};
+
+const cardVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { 
+        opacity: 1, 
+        y: 0,
+        transition: { duration: 0.5 }
+    }
+};
+
 function ProjectCard({ project, index }) {
     const cardRef = useRef(null);
 
@@ -17,12 +36,7 @@ function ProjectCard({ project, index }) {
     };
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ delay: index * 0.1, duration: 0.5 }}
-        >
+        <motion.div variants={cardVariants}>
             <TiltCard
                 maxTilt={6}
                 scale={1.02}
@@ -285,11 +299,17 @@ export default function Projects() {
                             <p className="text-slate-500 dark:text-slate-400">Failed to load projects. Please try again.</p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <motion.div 
+                            variants={containerVariants}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true, margin: "-50px" }}
+                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                        >
                             {projects.map((project, index) => (
                                 <ProjectCard key={project.id} project={project} index={index} />
                             ))}
-                        </div>
+                        </motion.div>
                     )}
                 </div>
             </div>
