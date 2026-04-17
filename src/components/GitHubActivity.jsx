@@ -10,10 +10,10 @@ function StatCard({ icon, value, label, gradient }) {
             className="p-5 rounded-2xl bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 hover:border-primary/30 transition-all"
         >
             <div className="flex items-center gap-4">
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center text-white shadow-lg`}>
+                <div className={`w-12 h-12 shrink-0 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center text-white shadow-lg`}>
                     <span className="material-symbols-outlined text-[24px]">{icon}</span>
                 </div>
-                <div>
+                <div className="min-w-0">
                     <p className="text-2xl font-black text-slate-900 dark:text-white">{value}</p>
                     <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">{label}</p>
                 </div>
@@ -97,7 +97,7 @@ function RecentRepos({ repos }) {
                         className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 hover:bg-primary/5 transition-colors group"
                     >
                         <div className="flex items-center gap-3 min-w-0">
-                            <span className="material-symbols-outlined text-slate-400 text-[18px]">commit</span>
+                            <span className="material-symbols-outlined text-slate-400 text-[18px] shrink-0">commit</span>
                             <span className="text-sm font-medium text-slate-700 dark:text-slate-300 truncate group-hover:text-primary transition-colors">
                                 {repo.name}
                             </span>

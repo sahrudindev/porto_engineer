@@ -55,11 +55,11 @@ function StatCard({ icon, value, label, delay = 0 }) {
         >
             <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-violet-500/20 to-cyan-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <div className="relative glass rounded-2xl p-5 hover-lift cursor-default">
-                <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-violet-500 flex items-center justify-center text-white shadow-lg shadow-primary/25">
+                <div className="flex items-center gap-3 mb-2 min-w-0">
+                    <div className="w-10 h-10 shrink-0 rounded-xl bg-gradient-to-br from-primary to-violet-500 flex items-center justify-center text-white shadow-lg shadow-primary/25">
                         <span className="material-symbols-outlined text-[20px]">{icon}</span>
                     </div>
-                    <p className="text-2xl lg:text-3xl font-black text-slate-900 dark:text-white">
+                    <p className="text-2xl lg:text-3xl font-black text-slate-900 dark:text-white truncate">
                         {value}
                     </p>
                 </div>
