@@ -17,7 +17,7 @@ Currently focused on: Real-time data platforms, Lakehouse architecture, FinOps o
     location: "Indonesia",
     linkedin: "https://www.linkedin.com/in/sahrudindev/",
     github: "https://github.com/sahrudindev",
-    resumeUrl: "/resume.pdf",
+    resumeUrl: "/Dataengineerporto.pdf",
     profilePhoto: "https://avatars.githubusercontent.com/u/92308156?v=4",
     available: true,
 };

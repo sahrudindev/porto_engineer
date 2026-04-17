@@ -123,6 +123,7 @@ export default function Navbar() {
                         <Magnet padding={40} magnetStrength={0.15}>
                             <a
                                 href={personalInfo.resumeUrl}
+                                download="Sahrudin_DataEngineer_Resume.pdf"
                                 className="hidden sm:flex h-11 items-center justify-center rounded-xl bg-gradient-to-r from-primary to-violet-500 px-5 text-sm font-bold text-white shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 transition-all"
                             >
                                 <span className="material-symbols-outlined mr-2 text-[18px]">download</span>
@@ -179,6 +180,7 @@ export default function Navbar() {
                             ))}
                             <a
                                 href={personalInfo.resumeUrl}
+                                download="Sahrudin_DataEngineer_Resume.pdf"
                                 className="flex h-12 items-center justify-center rounded-xl bg-gradient-to-r from-primary to-violet-500 px-6 text-base font-bold text-white mt-2 shadow-lg shadow-primary/25"
                             >
                                 <span className="material-symbols-outlined mr-2">download</span>
