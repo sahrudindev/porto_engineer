@@ -376,31 +376,65 @@ body {
   animation-delay: 0.8s;
 }
 
-/* ===== GLASSMORPHISM ===== */
+/* ===== GLASSMORPHISM (Optimized for Mobile) ===== */
+/* Mobile First: Solid/Opaque backgrounds without heavy blur */
 .glass {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .dark .glass {
-  background: rgba(15, 23, 42, 0.65);
+  background: rgba(15, 23, 42, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
 .glass-strong {
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  background: rgba(255, 255, 255, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .dark .glass-strong {
-  background: rgba(15, 23, 42, 0.85);
+  background: rgba(15, 23, 42, 0.98);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Desktop/Tablet: Enable GPU-heavy Glassmorphism */
+@media (min-width: 768px) {
+  .glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .dark .glass {
+    background: rgba(15, 23, 42, 0.65);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  }
+
+  .glass-strong {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
+
+  .dark .glass-strong {
+    background: rgba(15, 23, 42, 0.85);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  }
+}
+
+/* Globally disable Tailwind backdrop filters on mobile to save GPU */
+@media (max-width: 767px) {
+  .backdrop-blur,
+  .backdrop-blur-sm,
+  .backdrop-blur-md,
+  .backdrop-blur-lg,
+  .backdrop-blur-xl {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
 }
 
 /* ===== GRADIENT TEXT ===== */
