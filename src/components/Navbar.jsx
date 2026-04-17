@@ -11,25 +11,35 @@ export default function Navbar() {
     const { darkMode, toggleDarkMode } = useTheme();
 
     useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 20);
+        let throttleTimeout = null;
 
-            // Update active section based on scroll position
-            const sections = ['home', 'about', 'experience', 'projects', 'certifications', 'contact'];
-            for (const section of sections.reverse()) {
-                const element = document.getElementById(section);
-                if (element) {
-                    const rect = element.getBoundingClientRect();
-                    if (rect.top <= 100) {
-                        setActiveSection(section);
-                        break;
+        const handleScroll = () => {
+            if (throttleTimeout) return;
+            
+            throttleTimeout = setTimeout(() => {
+                setScrolled(window.scrollY > 20);
+
+                // Update active section based on scroll position
+                const sections = ['home', 'about', 'experience', 'projects', 'certifications', 'contact'];
+                for (const section of sections.reverse()) {
+                    const element = document.getElementById(section);
+                    if (element) {
+                        const rect = element.getBoundingClientRect();
+                        if (rect.top <= 100) {
+                            setActiveSection(section);
+                            break;
+                        }
                     }
                 }
-            }
+                throttleTimeout = null;
+            }, 100);
         };
 
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            if (throttleTimeout) clearTimeout(throttleTimeout);
+        };
     }, []);
 
     const navLinks = [

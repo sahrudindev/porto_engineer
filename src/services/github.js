@@ -6,46 +6,83 @@ const headers = GITHUB_TOKEN
     ? { Authorization: `Bearer ${GITHUB_TOKEN}` }
     : {};
 
-export async function fetchGitHubProfile() {
+const CACHE_EXPIRATION_MS = 60 * 60 * 1000; // 1 hour
+
+async function withCache(key, fetcher) {
     try {
-        const response = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}`, { headers });
-        if (!response.ok) throw new Error('Failed to fetch profile');
-        return await response.json();
-    } catch (error) {
-        console.error('Error fetching GitHub profile:', error);
-        return null;
+        const cached = localStorage.getItem(key);
+        if (cached) {
+            const parsed = JSON.parse(cached);
+            if (Date.now() - parsed.timestamp < CACHE_EXPIRATION_MS) {
+                return parsed.data;
+            }
+        }
+    } catch (e) {
+        console.warn('Cache read error:', e);
     }
+
+    const data = await fetcher();
+    
+    // Don't cache null/empty data
+    if (data && (!Array.isArray(data) || data.length > 0)) {
+        try {
+            localStorage.setItem(key, JSON.stringify({
+                timestamp: Date.now(),
+                data
+            }));
+        } catch (e) {
+            console.warn('Cache write error (possibly full):', e);
+        }
+    }
+    return data;
+}
+
+export async function fetchGitHubProfile() {
+    return withCache(`github_profile_${GITHUB_USERNAME}`, async () => {
+        try {
+            const response = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}`, { headers });
+            if (!response.ok) throw new Error('Failed to fetch profile');
+            return await response.json();
+        } catch (error) {
+            console.error('Error fetching GitHub profile:', error);
+            return null;
+        }
+    });
 }
 
 export async function fetchGitHubRepos(sort = 'updated', perPage = 10) {
-    try {
-        const response = await fetch(
-            `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=${sort}&per_page=${perPage}`,
-            { headers }
-        );
-        if (!response.ok) throw new Error('Failed to fetch repos');
-        return await response.json();
-    } catch (error) {
-        console.error('Error fetching GitHub repos:', error);
-        return [];
-    }
+    return withCache(`github_repos_${GITHUB_USERNAME}_${sort}_${perPage}`, async () => {
+        try {
+            const response = await fetch(
+                `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=${sort}&per_page=${perPage}`,
+                { headers }
+            );
+            if (!response.ok) throw new Error('Failed to fetch repos');
+            return await response.json();
+        } catch (error) {
+            console.error('Error fetching GitHub repos:', error);
+            return [];
+        }
+    });
 }
 
 export async function fetchRepoReadme(repoName) {
-    try {
-        const response = await fetch(
-            `https://api.github.com/repos/${GITHUB_USERNAME}/${repoName}/readme`,
-            { headers }
-        );
-        if (!response.ok) return null;
-        const data = await response.json();
-        // Decode base64 content
-        const content = atob(data.content);
-        return content;
-    } catch (error) {
-        console.error(`Error fetching README for ${repoName}:`, error);
-        return null;
-    }
+    return withCache(`github_readme_${GITHUB_USERNAME}_${repoName}`, async () => {
+        try {
+            const response = await fetch(
+                `https://api.github.com/repos/${GITHUB_USERNAME}/${repoName}/readme`,
+                { headers }
+            );
+            if (!response.ok) return null;
+            const data = await response.json();
+            // Decode base64 content
+            const content = atob(data.content);
+            return content;
+        } catch (error) {
+            console.error(`Error fetching README for ${repoName}:`, error);
+            return null;
+        }
+    });
 }
 
 // Extract only real images (png, jpg, jpeg, webp, gif) from README content
