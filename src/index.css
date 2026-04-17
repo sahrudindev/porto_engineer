@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   /* Primary Colors */
@@ -14,13 +15,13 @@
 
   /* Background Colors */
   --color-background-light: #f8fafc;
-  --color-background-dark: #0a0f1a;
+  --color-background-dark: #0f172a; /* Slate 900 for softer dark mode */
   --color-surface-light: #ffffff;
-  --color-surface-dark: #111827;
+  --color-surface-dark: #1e293b; /* Slate 800 */
 
   /* Glass Colors */
   --color-glass-light: rgba(255, 255, 255, 0.7);
-  --color-glass-dark: rgba(17, 24, 39, 0.7);
+  --color-glass-dark: rgba(15, 23, 42, 0.6);
 
   /* Font */
   --font-family-display: "Manrope", ui-sans-serif, system-ui, sans-serif;
@@ -384,8 +385,9 @@ body {
 }
 
 .dark .glass {
-  background: rgba(17, 24, 39, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
 .glass-strong {
@@ -396,8 +398,9 @@ body {
 }
 
 .dark .glass-strong {
-  background: rgba(17, 24, 39, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
 /* ===== GRADIENT TEXT ===== */
@@ -447,11 +450,11 @@ body {
 
 .dark .bg-mesh-gradient {
   background:
-    radial-gradient(at 40% 20%, rgba(139, 92, 246, 0.2) 0px, transparent 50%),
-    radial-gradient(at 80% 0%, rgba(34, 211, 238, 0.15) 0px, transparent 50%),
-    radial-gradient(at 0% 50%, rgba(19, 127, 236, 0.15) 0px, transparent 50%),
-    radial-gradient(at 80% 50%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
+    radial-gradient(at 40% 20%, rgba(139, 92, 246, 0.12) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, rgba(34, 211, 238, 0.08) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, rgba(19, 127, 236, 0.1) 0px, transparent 50%),
+    radial-gradient(at 80% 50%, rgba(139, 92, 246, 0.1) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(16, 185, 129, 0.08) 0px, transparent 50%);
 }
 
 /* ===== GLOW EFFECTS ===== */
@@ -503,7 +506,7 @@ body {
 }
 
 .dark .hover-lift:hover {
-  box-shadow: 0 20px 40px rgba(139, 92, 246, 0.1);
+  box-shadow: 0 20px 40px rgba(139, 92, 246, 0.15);
 }
 
 .hover-glow {
@@ -593,7 +596,7 @@ body {
 }
 
 .dark .card-gradient-border {
-  background: linear-gradient(135deg, rgba(17, 24, 39, 0.9), rgba(17, 24, 39, 0.95));
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.95));
 }
 
 .card-gradient-border::before {
