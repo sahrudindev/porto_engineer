@@ -69,25 +69,25 @@ function TimelineCard({ experience, index, isLast }) {
     const isLeft = index % 2 === 0;
 
     return (
-        <div className={`relative flex items-start gap-8 ${isLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'}`}>
-            {/* Timeline Line & Dot (Mobile) */}
-            <div className="lg:hidden absolute left-8 top-0 bottom-0 w-[2px]">
+        <div className={`relative pl-8 sm:pl-10 lg:pl-0 lg:flex lg:items-start lg:gap-8 ${isLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'}`}>
+            {/* Timeline Line (Mobile) */}
+            <div className="lg:hidden absolute left-[7px] top-6 -bottom-8 sm:-bottom-12 w-[2px] z-0">
                 {!isLast && (
-                    <div className="absolute top-12 bottom-0 w-full bg-gradient-to-b from-primary via-violet-500 to-transparent" />
+                    <div className="w-full h-full bg-gradient-to-b from-primary via-violet-500 to-cyan-500/50" />
                 )}
             </div>
 
             {/* Timeline Dot (Mobile) */}
-            <div className="lg:hidden relative z-10 flex-shrink-0">
+            <div className="lg:hidden absolute left-0 top-6 z-10">
                 <div className={`timeline-dot bg-gradient-to-br ${experience.color}`} />
             </div>
 
             {/* Card */}
             <motion.div
                 variants={cardVariants}
-                className="flex-1 lg:w-[calc(50%-40px)]"
+                className="flex-1 lg:w-[calc(50%-40px)] w-full"
             >
-                <div className="group relative bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 p-6 hover:shadow-xl hover:shadow-primary/5 transition-all hover-lift overflow-hidden">
+                <div className="group relative bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 p-5 sm:p-6 hover:shadow-xl hover:shadow-primary/5 transition-all hover-lift overflow-hidden">
                     {/* Gradient accent */}
                     <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${experience.color}`} />
 
@@ -144,10 +144,10 @@ function TimelineCard({ experience, index, isLast }) {
             </motion.div>
 
             {/* Desktop Timeline Center */}
-            <div className="hidden lg:flex flex-col items-center">
-                <div className={`timeline-dot bg-gradient-to-br ${experience.color}`} />
+            <div className="hidden lg:flex flex-col items-center relative self-stretch">
+                <div className={`timeline-dot bg-gradient-to-br ${experience.color} relative z-10 mt-1`} />
                 {!isLast && (
-                    <div className="w-[2px] flex-1 bg-gradient-to-b from-primary via-violet-500 to-cyan-500 mt-2" />
+                    <div className="absolute top-4 -bottom-12 w-[2px] bg-gradient-to-b from-primary via-violet-500 to-cyan-500/50 z-0" />
                 )}
             </div>
 
@@ -203,7 +203,7 @@ export default function Experience() {
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true, margin: "-50px" }}
-                        className="relative pl-16 lg:pl-0 space-y-8 lg:space-y-12"
+                        className="relative space-y-8 lg:space-y-12"
                     >
                         {experiences.map((experience, index) => (
                             <TimelineCard
